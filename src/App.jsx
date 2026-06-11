@@ -204,16 +204,27 @@ const BlinkingCursor = ({ delay }) => (
 /* ─────────────────────────────────────────────
    VIDEO BACKGROUND HERO
 ───────────────────────────────────────────── */
-const HeroSection = () => (
-  <section style={{
-    height: "100vh",
-    display: "flex",
-    flexDirection: "column",
-    overflowX: "clip",
-    position: "relative",
-  }}>
-    {/* VIDEO BACKGROUND */}
-    <video
+const HeroSection = () => {
+  const videoRef = useRef(null);
+  
+  useEffect(() => {
+    if (videoRef.current) {
+      // Force play for restrictive mobile browsers
+      videoRef.current.play().catch(e => console.log("Video play blocked:", e));
+    }
+  }, []);
+
+  return (
+    <section style={{
+      height: "100vh",
+      display: "flex",
+      flexDirection: "column",
+      overflowX: "clip",
+      position: "relative",
+    }}>
+      {/* VIDEO BACKGROUND */}
+      <video
+        ref={videoRef}
       autoPlay
       muted
       loop
@@ -275,10 +286,11 @@ const HeroSection = () => (
           fontWeight: 900,
           textTransform: "uppercase",
           letterSpacing: "-0.03em",
-          lineHeight: 1,
-          whiteSpace: "nowrap",
+          lineHeight: 1.1,
+          whiteSpace: "normal",
+          wordWrap: "break-word",
           width: "100%",
-          fontSize: "clamp(8vw, 12vw, 14vw)",
+          fontSize: "clamp(2.5rem, 10vw, 14vw)",
           textAlign: "center",
           marginTop: "clamp(-20px, -2vw, -20px)",
         }}
@@ -546,7 +558,14 @@ const skills = [
   { num: "05", name: "DSA & Problem Solving", desc: "Consistent LeetCode practice with 320+ problems solved covering arrays, trees, dynamic programming, and graph algorithms in Java." },
 ];
 
-const SkillsSection = () => (
+const SkillsSection = () => {
+  const vidRef = useRef(null);
+  useEffect(() => {
+    if (vidRef.current) {
+      vidRef.current.play().catch(e => console.log("Auto-play prevented", e));
+    }
+  }, []);
+  return (
   <section id="skills" style={{
     background: "#FFFFFF",
     borderRadius: "50px 50px 0 0",
